@@ -1,0 +1,2264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Daily Routine</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0e1a;
+        --surface: #111827;
+        --surface2: #1a2236;
+        --border: #1e2d45;
+        --prayer: #10b981;
+        --class: #3b82f6;
+        --study: #8b5cf6;
+        --meal: #f59e0b;
+        --rest: #64748b;
+        --sleep: #1e3a5f;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --gold: #f59e0b;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        min-height: 100vh;
+        background-image:
+          radial-gradient(
+            ellipse at 20% 0%,
+            rgba(59, 130, 246, 0.08) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 80% 100%,
+            rgba(139, 92, 246, 0.06) 0%,
+            transparent 60%
+          );
+      }
+
+      header {
+        text-align: center;
+        padding: 48px 20px 32px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+
+      header::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gold), var(--class));
+      }
+
+      header .subtitle {
+        font-size: 11px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 12px;
+      }
+
+      header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(28px, 6vw, 48px);
+        font-weight: 900;
+        line-height: 1.1;
+        background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      header p {
+        color: var(--muted);
+        margin-top: 10px;
+        font-size: 14px;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        padding: 20px;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        background: var(--surface);
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        padding: 16px 16px 0;
+        max-width: 900px;
+        margin: 0 auto;
+        scrollbar-width: none;
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab {
+        flex-shrink: 0;
+        padding: 8px 16px;
+        border-radius: 8px 8px 0 0;
+        border: 1px solid var(--border);
+        border-bottom: none;
+        background: var(--surface);
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      .tab.active {
+        background: var(--surface2);
+        color: var(--text);
+        border-color: var(--border);
+      }
+
+      .tab:hover:not(.active) {
+        color: var(--text);
+        background: var(--surface2);
+      }
+
+      .content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 16px 60px;
+      }
+
+      .day-panel {
+        display: none;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 0 12px 12px 12px;
+        overflow: hidden;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .day-panel.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .day-note {
+        background: rgba(245, 158, 11, 0.08);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 20px;
+        font-size: 13px;
+        color: var(--gold);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .timeline {
+        padding: 8px 0;
+      }
+
+      .entry {
+        display: grid;
+        grid-template-columns: 90px 4px 1fr;
+        gap: 0 12px;
+        padding: 6px 16px;
+        align-items: start;
+        transition: background 0.15s;
+      }
+
+      .entry:hover {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .time-col {
+        text-align: right;
+        padding-top: 14px;
+      }
+
+      .time {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        line-height: 1;
+      }
+
+      .line-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 14px;
+      }
+
+      .circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        border: 2px solid currentColor;
+        background: var(--bg);
+      }
+
+      .vline {
+        width: 2px;
+        flex: 1;
+        min-height: 20px;
+        background: var(--border);
+        margin-top: 3px;
+      }
+
+      .card {
+        margin: 4px 0 8px;
+        background: var(--surface);
+        border-radius: 10px;
+        padding: 12px 14px;
+        border-left: 3px solid currentColor;
+        position: relative;
+      }
+
+      .card-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 3px;
+      }
+
+      .badge {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        opacity: 0.8;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 2px 7px;
+        border-radius: 4px;
+      }
+
+      .card-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .card-sub {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+        margin-top: 2px;
+      }
+
+      .emoji {
+        font-size: 14px;
+      }
+
+      /* colors */
+      .prayer {
+        color: var(--prayer);
+      }
+      .class {
+        color: var(--class);
+      }
+      .study {
+        color: var(--study);
+      }
+      .meal {
+        color: var(--meal);
+      }
+      .rest {
+        color: var(--rest);
+      }
+      .sleep {
+        color: #3b82f6;
+      }
+      .personal {
+        color: #ec4899;
+      }
+
+      /* Meal plan section */
+      .meal-section {
+        border-top: 1px solid var(--border);
+        padding: 24px 20px;
+      }
+
+      .meal-section h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 20px;
+        margin-bottom: 6px;
+        color: var(--gold);
+      }
+
+      .meal-section .desc {
+        font-size: 13px;
+        color: var(--muted);
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .meal-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      .meal-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        border-top: 3px solid var(--meal);
+      }
+
+      .meal-card .meal-time {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 6px;
+      }
+
+      .meal-card .meal-name {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .meal-card ul {
+        list-style: none;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      .meal-card ul li::before {
+        content: "→ ";
+        color: var(--gold);
+      }
+
+      .cal-badge {
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 11px;
+        color: var(--gold);
+        background: rgba(245, 158, 11, 0.1);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+      }
+
+      .tips-section {
+        border-top: 1px solid var(--border);
+        padding: 20px;
+      }
+
+      .tips-section h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        margin-bottom: 14px;
+        color: var(--text);
+      }
+
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+      }
+
+      .tip {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .tip strong {
+        display: block;
+        color: var(--text);
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+
+      @media (max-width: 500px) {
+        .entry {
+          grid-template-columns: 75px 4px 1fr;
+        }
+        .time {
+          font-size: 11px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="subtitle">Structured Life Plan</div>
+      <h1>Shahed's Daily Routine</h1>
+      <p>
+        Balanced schedule for classes,study, 5 daily prayers (Namaz), and a
+        high-calorie meal plan to gain weight.
+      </p>
+    </header>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="dot" style="background: var(--prayer)"></div>
+        Namaz
+      </div>
+      <div class="legend-item">
+        <div class="dot" style="background: var(--class)"></div>
+        Class
+      </div>
+      <div class="legend-item">
+        <div class="dot" style="background: var(--study)"></div>
+        Study/Reading
+      </div>
+      <div class="legend-item">
+        <div class="dot" style="background: var(--meal)"></div>
+        Meal
+      </div>
+      <div class="legend-item">
+        <div class="dot" style="background: var(--rest)"></div>
+        Rest/Break
+      </div>
+      <div class="legend-item">
+        <div class="dot" style="background: (#ec4899)"></div>
+        Personal
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="show('tue')">Tue 28 Apr</div>
+      <div class="tab" onclick="show('wed')">Wed 29 Apr</div>
+      <div class="tab" onclick="show('thu')">Thu 30 Apr</div>
+      <div class="tab" onclick="show('sat')">Sat 2 May</div>
+      <div class="tab" onclick="show('sun')">Sun 3 May</div>
+      <div class="tab" onclick="show('mon')">Mon 4 May</div>
+      <div class="tab" onclick="show('meal')">🍽 Meal Plan</div>
+    </div>
+
+    <div class="content">
+      <!-- TUESDAY -->
+      <div id="panel-tue" class="day-panel active">
+        <div class="day-note">
+          📅 Tuesday — CSE421L Lab (11:00 AM – 1:50 PM) · Room 09F-24L
+        </div>
+        <div class="timeline">
+          <!-- Fajr -->
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz</div>
+              <div class="card-sub">
+                Wake up, Wudu, Fajr prayer + 2 Sunnah. Recite some Quran after
+                prayer.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Breakfast #1 — High Calorie Start</div>
+              <div class="card-sub">
+                Milk + banana shake · 2 boiled eggs · Oats with honey & nuts.
+                ~700 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Morning Study Block</div>
+              <div class="card-sub">
+                CSE421 (Operating Systems) — read lecture notes, review lab
+                tasks for today. Most productive hours — use them well.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Breakfast #2 — Pre-Lab Fuel</div>
+              <div class="card-sub">
+                Paratha / bread with butter · Cheese · Fruit (banana or mango).
+                ~500 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Prep</span></div>
+              <div class="card-title">🎒 Get Ready & Commute</div>
+              <div class="card-sub">
+                Freshen up, pack bag, head to campus. Arrive by 10:45 AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Lab</span></div>
+              <div class="card-title">🖥 CSE421L — Operating Systems Lab</div>
+              <div class="card-sub">
+                Room 09F-24L · MSMA (23 students) · 11:00 AM – 1:50 PM. Stay
+                focused, complete all tasks.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz (during lab break)</div>
+              <div class="card-sub">
+                Offer Dhuhr in campus mosque / prayer room during any break
+                window in lab.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch — Main Heavy Meal</div>
+              <div class="card-sub">
+                Rice + Daal/Curry + Chicken/Meat + Salad + Yogurt. Largest meal
+                of day. ~900 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:45 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 Power Nap (20–30 min)</div>
+              <div class="card-sub">
+                Short rest to recharge. Set alarm — don't oversleep.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Asr</span></div>
+              <div class="card-title">🕌 Asr Namaz</div>
+              <div class="card-sub">
+                Wudu + Asr prayer. Take a moment for dua and reflection.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">4:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Afternoon Study — CSE350 / CSE340</div>
+              <div class="card-sub">
+                Review class material, work on assignments or upcoming lab prep.
+                90-min focused block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Evening Snack</div>
+              <div class="card-sub">
+                Peanut butter toast · Milk · Handful of mixed nuts + dates. ~450
+                kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Break</span></div>
+              <div class="card-title">🚶 Light Walk / Fresh Air</div>
+              <div class="card-sub">
+                15–20 min walk improves appetite and digestion — key for weight
+                gain.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">
+                Offer Maghrib at sunset. Recite evening Azkar after prayer.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Evening Study — Revision</div>
+              <div class="card-sub">
+                Review today's lab work. Note difficulties for tomorrow's
+                follow-up. 60 min max.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner — High Protein</div>
+              <div class="card-sub">
+                Chicken/Beef + Rice or Roti + Vegetables + Lentil soup. ~850
+                kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha Namaz</div>
+              <div class="card-sub">
+                Isha + Witr prayer. Read a few verses of Quran before bed. Wind
+                down the day.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Before Bed — Weight Gain Shake</div>
+              <div class="card-sub">
+                Full-fat milk (400ml) + 2 tbsp peanut butter + banana blended OR
+                warm milk + honey. ~400 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep — 6.5 hrs before Fajr</div>
+              <div class="card-sub">
+                No phone 15 min before sleep. Consistent sleep = better appetite
+                & muscle recovery.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEDNESDAY -->
+      <div id="panel-wed" class="day-panel">
+        <div class="day-note">
+          📅 Wednesday — CSE340 Theory (9:30–10:50 AM) · CSE421 Theory
+          (3:30–4:50 PM)
+        </div>
+        <div class="timeline">
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz</div>
+              <div class="card-sub">
+                Wake, Wudu, Fajr prayer. Short Quran recitation.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Breakfast #1</div>
+              <div class="card-sub">
+                Milk shake + 2 eggs + oats with nuts & honey. ~700 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Morning Study — CSE340 Prep</div>
+              <div class="card-sub">
+                Review CSE340 notes for today's theory class. 2 hours focused
+                study.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:15 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Breakfast #2</div>
+              <div class="card-sub">
+                Paratha + butter + cheese + fruit. ~500 kcal. Leave for campus
+                by 8:45 AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE340 Theory — Room 08H-22C</div>
+              <div class="card-sub">
+                TNMF (36 students) · 9:30 – 10:50 AM. Take active notes.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Campus / Library Study</div>
+              <div class="card-sub">
+                Revise CSE340 notes while memory is fresh. Work on pending
+                assignments. CSE421 prep for 3:30 PM class.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz</div>
+              <div class="card-sub">
+                Campus mosque/prayer room. Don't skip — set a reminder.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">1:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch — Heavy Meal</div>
+              <div class="card-sub">
+                Rice + meat curry + daal + yogurt + salad. ~900 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 Rest / Light nap</div>
+              <div class="card-sub">
+                20 min rest before evening class. Recharge for CSE421.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Quick CSE421 Revision</div>
+              <div class="card-sub">
+                Review CSE421 slides/notes before 3:30 PM class. 45 min focused
+                prep.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE421 Theory — Room 07H-27C</div>
+              <div class="card-sub">
+                MSMA (23 students) · 3:30 – 4:50 PM. Participate actively.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Evening Snack</div>
+              <div class="card-sub">
+                Peanut butter + bread · Milk · Banana · Nuts. ~450 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Study — CSE221 / CSE350</div>
+              <div class="card-sub">
+                Work on non-class subjects for balance. 90-min block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">
+                Offer Maghrib. Evening Azkar. Take 10 min break.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner</div>
+              <div class="card-sub">
+                Protein-rich meal: meat + roti + vegetables + soup. ~850 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Light Revision</div>
+              <div class="card-sub">
+                Quick notes review, plan tomorrow. No heavy topics after dinner.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha + Witr Namaz</div>
+              <div class="card-sub">
+                Isha prayer + Witr. Recite bedtime dua. Wind down.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Bedtime Shake</div>
+              <div class="card-sub">
+                Full-fat milk + peanut butter + banana. ~400 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep</div>
+              <div class="card-sub">
+                Consistent sleep time is crucial for weight gain hormones (HGH
+                released during sleep).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THURSDAY -->
+      <div id="panel-thu" class="day-panel">
+        <div class="day-note">
+          📅 Thursday — CSE221 Theory (9:30–10:50 AM) · CSE350 Theory
+          (12:30–1:50 PM)
+        </div>
+        <div class="timeline">
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz</div>
+              <div class="card-sub">
+                Wake, Wudu, Fajr prayer. Short Quran recitation.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Breakfast #1</div>
+              <div class="card-sub">
+                Milk + banana shake · 2 boiled eggs · Oats with nuts. ~700 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Morning Study — CSE221 Prep</div>
+              <div class="card-sub">
+                Review CSE221 notes & topics for today's theory class. 2 hrs
+                deep study.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:15 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Breakfast #2</div>
+              <div class="card-sub">
+                Paratha + butter + egg + fruit. ~500 kcal. Leave home by 9:00
+                AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE221 Theory — Room 09A-05C</div>
+              <div class="card-sub">
+                MZG (31 students) · 9:30 – 10:50 AM. Ask questions actively.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Study + CSE350 Prep</div>
+              <div class="card-sub">
+                Revise CSE221 notes. Then prepare for CSE350 Theory at 12:30.
+                1.5 hr block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz</div>
+              <div class="card-sub">
+                Offer Dhuhr before CSE350 class. Campus prayer area.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE350 Theory — Room 07H-26C</div>
+              <div class="card-sub">TBA (19 students) · 12:30 – 1:50 PM.</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch</div>
+              <div class="card-sub">
+                Rice + Meat/Daal curry + Yogurt + Salad. ~900 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 Power Nap</div>
+              <div class="card-sub">
+                20–30 min nap. Important recovery time.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Asr</span></div>
+              <div class="card-title">🕌 Asr Namaz</div>
+              <div class="card-sub">Wudu + Asr prayer + dua.</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">4:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Afternoon Deep Study</div>
+              <div class="card-sub">
+                CSE350 / CSE340 — deep reading, past papers, concept mapping. 2
+                hr block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:45 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Evening Snack</div>
+              <div class="card-sub">
+                Nuts + dates + milk + peanut butter toast. ~450 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">Sunset prayer. Evening Azkar.</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Evening Study</div>
+              <div class="card-sub">
+                Assignment work, practice problems. 1 hr focused session.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner</div>
+              <div class="card-sub">
+                Protein dinner: Chicken/beef + rice + vegetables + lentil soup.
+                ~850 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha + Witr Namaz</div>
+              <div class="card-sub">
+                Isha prayer + Witr. Plan & review tomorrow (Friday — no
+                classes).
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Bedtime Shake</div>
+              <div class="card-sub">
+                Full-fat milk + peanut butter + banana. ~400 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep</div>
+              <div class="card-sub">
+                Full night rest. Tomorrow is Friday — make time for Jumu'ah
+                prayer.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SATURDAY -->
+      <div id="panel-sat" class="day-panel">
+        <div class="day-note">
+          📅 Saturday 2 May — CSE221 Theory (9:30–10:50 AM) · CSE350 Theory
+          (12:30–1:50 PM)
+        </div>
+        <div class="timeline">
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz</div>
+              <div class="card-sub">
+                Wake, Wudu, Fajr. Recite Quran quietly.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Breakfast #1</div>
+              <div class="card-sub">
+                Milk shake + eggs + oats with nuts and honey. ~700 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Morning Study — CSE221 Prep</div>
+              <div class="card-sub">
+                Deep reading for both CSE221 and CSE350 theory classes. 2 hr
+                block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:15 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Breakfast #2</div>
+              <div class="card-sub">
+                Paratha + butter + egg + fruit. ~500 kcal. Commute by 9:00 AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE221 Theory — Room 09A-05C</div>
+              <div class="card-sub">MZG (31 students) · 9:30 – 10:50 AM</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Campus Study + CSE350 Prep</div>
+              <div class="card-sub">
+                Revise CSE221. Prep CSE350 theory topics for 12:30 PM class.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz</div>
+              <div class="card-sub">
+                Before CSE350 class. Quick prayer in campus area.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE350 Theory — Room 07H-26C</div>
+              <div class="card-sub">TBA (19 students) · 12:30 – 1:50 PM</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch</div>
+              <div class="card-sub">
+                Full meal: rice + curry + yogurt + salad. ~900 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 Power Nap</div>
+              <div class="card-sub">
+                20–30 min rest. Very important on a 2-class day.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Asr</span></div>
+              <div class="card-title">🕌 Asr Namaz</div>
+              <div class="card-sub">Asr prayer + dua.</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">4:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Weekend Deep Study</div>
+              <div class="card-sub">
+                Work on assignments, quizzes, lab reports. 3 hrs — most
+                productive weekend block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Snack Break</div>
+              <div class="card-sub">
+                Nuts + milk + banana + peanut butter toast. ~450 kcal. Continue
+                studying after.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">
+                Sunset prayer. Evening Azkar. Short family time.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner</div>
+              <div class="card-sub">
+                Heavy protein dinner. Meat + rice + soup + vegetables. ~850 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha + Witr Namaz</div>
+              <div class="card-sub">
+                Full Isha prayer. Plan Sunday's lab sessions.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Bedtime Shake</div>
+              <div class="card-sub">
+                Full-fat milk + peanut butter + banana. ~400 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep</div>
+              <div class="card-sub">
+                Early wake needed tomorrow (Sunday — Lab at 8:00 AM!).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUNDAY -->
+      <div id="panel-sun" class="day-panel">
+        <div class="day-note">
+          📅 Sunday 3 May — CSE221L Lab (8:00–10:50 AM) · CSE350L Lab (2:00–4:50
+          PM) — LONGEST DAY!
+        </div>
+        <div class="timeline">
+          <div class="entry">
+            <div class="time-col"><div class="time">4:45 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz — EARLY WAKE</div>
+              <div class="card-sub">
+                Lab starts at 8 AM. Wake by 4:45, Fajr, then quick eat and head
+                out.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:15 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Power Breakfast</div>
+              <div class="card-sub">
+                HEAVY breakfast for a long lab day: 3 eggs + paratha + milk
+                shake + banana + nuts. ~900 kcal. Eat everything — you'll need
+                it.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Prep</span></div>
+              <div class="card-title">🎒 Get Ready & Commute</div>
+              <div class="card-sub">
+                Shower, pack, bring snacks for campus. Leave by 7:00 AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Lab</span></div>
+              <div class="card-title">🖥 CSE221L Lab — Room 09F-24L</div>
+              <div class="card-sub">
+                TBA (31 students) · 8:00 – 10:50 AM. Longest morning lab. Stay
+                hydrated.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Mid-Morning Snack</div>
+              <div class="card-sub">
+                Bread + eggs / canteen food + juice or milk. ~500 kcal. Critical
+                — long gap to next lab.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 CSE350L Prep</div>
+              <div class="card-sub">
+                Review CSE350L lab tasks before 2:00 PM. Use campus library. 1.5
+                hr focused work.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz</div>
+              <div class="card-sub">
+                Campus mosque. Don't skip — you have time before the lab.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">1:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch</div>
+              <div class="card-sub">
+                Campus cafeteria: Rice + meat + yogurt. Eat full. ~700 kcal.
+                Fuel for afternoon lab.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Lab</span></div>
+              <div class="card-title">🖥 CSE350L Lab — Room 12B-20L</div>
+              <div class="card-sub">
+                TBA (19 students) · 2:00 – 4:50 PM. Second lab of the day — stay
+                alert!
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Recovery Snack</div>
+              <div class="card-sub">
+                After a grueling day — nuts + milk + banana + dates. ~450 kcal.
+                Eat immediately.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 REST — You've earned it</div>
+              <div class="card-sub">
+                Full rest after two back-to-back labs. Light walk or just relax.
+                No heavy studying tonight.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">
+                Sunset prayer. Dua for strength and health.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Light</span></div>
+              <div class="card-title">📖 Light Review Only</div>
+              <div class="card-sub">
+                Just review lab reports briefly. Write any notes. Max 45 min.
+                Don't push hard tonight.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner</div>
+              <div class="card-sub">
+                Full protein dinner. Meat + roti + vegetables + soup. ~850 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha + Witr Namaz</div>
+              <div class="card-sub">
+                Isha prayer. Read Surah Mulk before sleep (Sunnah).
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Bedtime Shake</div>
+              <div class="card-sub">
+                Full-fat milk + peanut butter + banana. ~400 kcal. Your body
+                will use this overnight.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep — Well Deserved</div>
+              <div class="card-sub">
+                Hardest day of the week is done. Good sleep rebuilds muscle and
+                replenishes energy.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MONDAY -->
+      <div id="panel-mon" class="day-panel">
+        <div class="day-note">
+          📅 Monday 4 May — CSE340 Theory (9:30–10:50 AM) · CSE421 Theory
+          (3:30–4:50 PM)
+        </div>
+        <div class="timeline">
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Fajr</span></div>
+              <div class="card-title">🕌 Fajr Namaz</div>
+              <div class="card-sub">
+                Start the week with Fajr. Begin Monday with intention and dua
+                for a productive week.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 1</span></div>
+              <div class="card-title">🥛 Breakfast #1</div>
+              <div class="card-sub">
+                Milk shake + 2 eggs + oats with nuts and honey. ~700 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Morning Study — CSE340</div>
+              <div class="card-sub">
+                Deep read for CSE340. Review any Sunday lab reports too. 2 hr
+                morning block.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:15 AM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 2</span></div>
+              <div class="card-title">🍳 Breakfast #2</div>
+              <div class="card-sub">
+                Paratha + egg + butter + fruit. ~500 kcal. Commute by 9:00 AM.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 AM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE340 Theory — Room 08H-22C</div>
+              <div class="card-sub">TNMF (36 students) · 9:30 – 10:50 AM</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">11:00 AM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Study + CSE421 Prep</div>
+              <div class="card-sub">
+                Notes revision + prepare for CSE421 theory at 3:30 PM. Long gap
+                — use it wisely.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">12:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Dhuhr</span></div>
+              <div class="card-title">🕌 Dhuhr Namaz</div>
+              <div class="card-sub">
+                Offer Dhuhr at campus. Quick break from study.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">1:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 3</span></div>
+              <div class="card-title">🍛 Lunch</div>
+              <div class="card-sub">
+                Full rice + meat + daal + yogurt meal. ~900 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle rest"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card rest">
+              <div class="card-top"><span class="badge">Rest</span></div>
+              <div class="card-title">😴 Power Nap</div>
+              <div class="card-sub">
+                20–30 min nap. Ready for CSE421 theory.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">2:45 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📖 Final CSE421 Prep</div>
+              <div class="card-sub">
+                Quick 30 min recap of CSE421 topics for today's class.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">3:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle class"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card class">
+              <div class="card-top"><span class="badge">Theory</span></div>
+              <div class="card-title">🖥 CSE421 Theory — Room 07H-27C</div>
+              <div class="card-sub">MSMA (23 students) · 3:30 – 4:50 PM</div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Asr</span></div>
+              <div class="card-title">🕌 Asr Namaz</div>
+              <div class="card-sub">
+                Asr immediately after class ends or on the way home.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">5:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 4</span></div>
+              <div class="card-title">🥜 Evening Snack</div>
+              <div class="card-sub">
+                Nuts + milk + banana + dates. ~450 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">6:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle study"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card study">
+              <div class="card-top"><span class="badge">Study</span></div>
+              <div class="card-title">📚 Evening Study Block</div>
+              <div class="card-sub">
+                Weekly planning + review of all subjects. Assignments and
+                reading. 1.5 hrs.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">7:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Maghrib</span></div>
+              <div class="card-title">🕌 Maghrib Namaz</div>
+              <div class="card-sub">
+                Offer Maghrib. Family time / relaxation.
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">8:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 5</span></div>
+              <div class="card-title">🍖 Dinner</div>
+              <div class="card-sub">
+                High protein: Chicken/beef + rice + vegetables + soup. ~850 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">9:30 PM</div></div>
+            <div class="line-col">
+              <div class="circle prayer"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card prayer">
+              <div class="card-top"><span class="badge">Isha</span></div>
+              <div class="card-title">🕌 Isha + Witr Namaz</div>
+              <div class="card-sub">
+                Close the day with Isha. Plan tomorrow (Tuesday — lab day!).
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:00 PM</div></div>
+            <div class="line-col">
+              <div class="circle meal"></div>
+              <div class="vline"></div>
+            </div>
+            <div class="card meal">
+              <div class="card-top"><span class="badge">Meal 6</span></div>
+              <div class="card-title">🥛 Bedtime Shake</div>
+              <div class="card-sub">
+                Full-fat milk + peanut butter + banana. ~400 kcal
+              </div>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="time-col"><div class="time">10:30 PM</div></div>
+            <div class="line-col"><div class="circle sleep"></div></div>
+            <div class="card sleep">
+              <div class="card-top"><span class="badge">Sleep</span></div>
+              <div class="card-title">🌙 Sleep</div>
+              <div class="card-sub">
+                Consistent 10:30 PM sleep gives 6.5 hrs before Fajr.
+                Non-negotiable.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEAL PLAN -->
+      <div id="panel-meal" class="day-panel">
+        <div class="meal-section">
+          <h2>🍽 Daily Meal Plan — Weight Gain Strategy</h2>
+          <p class="desc">
+            Target: <strong>3,500–4,000 kcal/day</strong> with 6 meals. High
+            protein + healthy fats + complex carbs. Consistency is the key — eat
+            even when not hungry. Your goal is a caloric surplus every single
+            day.
+          </p>
+          <div class="meal-grid">
+            <div class="meal-card">
+              <div class="meal-time">Meal 1 · 5:30 AM</div>
+              <div class="meal-name">🥛 High-Calorie Breakfast</div>
+              <ul>
+                <li>Full-fat milk shake (400ml)</li>
+                <li>2 boiled or fried eggs</li>
+                <li>Oats with honey (1 cup)</li>
+                <li>Mixed nuts (almonds, walnuts)</li>
+                <li>1 banana blended in</li>
+              </ul>
+              <span class="cal-badge">~700 kcal</span>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">Meal 2 · 8:15 AM</div>
+              <div class="meal-name">🍳 Pre-Class Fuel</div>
+              <ul>
+                <li>2 Parathas with butter/ghee</li>
+                <li>Omelette or fried egg</li>
+                <li>Cream cheese or paneer</li>
+                <li>1 banana or mango</li>
+              </ul>
+              <span class="cal-badge">~500 kcal</span>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">Meal 3 · 1:00–2:00 PM</div>
+              <div class="meal-name">🍛 Heavy Lunch (Biggest Meal)</div>
+              <ul>
+                <li>2 cups rice or 3 rotis</li>
+                <li>Chicken/beef/mutton curry</li>
+                <li>Daal (lentil soup)</li>
+                <li>Full-fat yogurt (1 bowl)</li>
+                <li>Salad with olive oil</li>
+              </ul>
+              <span class="cal-badge">~900 kcal</span>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">Meal 4 · 5:30 PM</div>
+              <div class="meal-name">🥜 Calorie-Dense Snack</div>
+              <ul>
+                <li>Peanut butter (2 tbsp) on toast</li>
+                <li>1 glass full-fat milk</li>
+                <li>Dates (5–6 pieces)</li>
+                <li>Mixed dry fruits & nuts</li>
+              </ul>
+              <span class="cal-badge">~450 kcal</span>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">Meal 5 · 8:30 PM</div>
+              <div class="meal-name">🍖 Dinner — High Protein</div>
+              <ul>
+                <li>Chicken breast/beef/fish</li>
+                <li>Rice or 2 rotis</li>
+                <li>Cooked vegetables (sabzi)</li>
+                <li>Lentil soup</li>
+                <li>Butter/ghee on food</li>
+              </ul>
+              <span class="cal-badge">~850 kcal</span>
+            </div>
+            <div class="meal-card">
+              <div class="meal-time">Meal 6 · 10:00 PM</div>
+              <div class="meal-name">🥛 Bedtime Weight Gain Shake</div>
+              <ul>
+                <li>Full-fat milk (400ml)</li>
+                <li>2 tbsp peanut butter</li>
+                <li>1 banana</li>
+                <li>1 tsp honey (optional)</li>
+                <li>Blend everything together</li>
+              </ul>
+              <span class="cal-badge">~400 kcal</span>
+            </div>
+          </div>
+        </div>
+        <div class="tips-section">
+          <h2>💡 Weight Gain & Study Tips</h2>
+          <div class="tips-grid">
+            <div class="tip">
+              <strong>🥛 Never skip meals</strong>Even if you're not hungry,
+              eat. Set phone alarms for every meal. Consistent caloric surplus
+              is the only way to gain weight.
+            </div>
+            <div class="tip">
+              <strong>🍌 Calorie-dense foods</strong>Focus on: peanut butter,
+              full-fat dairy, eggs, rice, ghee, nuts, dates, avocado, bananas.
+              These pack maximum calories.
+            </div>
+            <div class="tip">
+              <strong>💪 Light exercise</strong>20-min walks stimulate appetite.
+              Push-ups/bodyweight exercises 3x/week build muscle (muscle weighs
+              more than fat).
+            </div>
+            <div class="tip">
+              <strong>😴 Sleep is medicine</strong>Growth hormone releases
+              during deep sleep. 6.5–7 hrs minimum every night. Sleep is when
+              you actually gain weight.
+            </div>
+            <div class="tip">
+              <strong>📖 Study in 90-min blocks</strong>Pomodoro technique: 45
+              min study → 10 min break → repeat. Two cycles = 90 min session.
+              Most efficient method.
+            </div>
+            <div class="tip">
+              <strong>🕌 Prayer = mental reset</strong>Each Namaz is a built-in
+              5-min break. Use it to fully disconnect from study. You'll return
+              more focused.
+            </div>
+            <div class="tip">
+              <strong>💧 Drink after meals</strong>Don't drink water right
+              before eating — it fills your stomach. Drink 20–30 min after each
+              meal.
+            </div>
+            <div class="tip">
+              <strong>📋 Weekly tracking</strong>Weigh yourself every Sunday
+              morning. If no gain after 2 weeks, increase meal portions. Slow
+              progress is still progress.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function show(day) {
+        document
+          .querySelectorAll(".day-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document.getElementById("panel-" + day).classList.add("active");
+        event.target.classList.add("active");
+      }
+    </script>
+  </body>
+</html>
